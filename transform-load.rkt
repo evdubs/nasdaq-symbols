@@ -1,15 +1,9 @@
 #lang racket
 
 (require db)
+(require racket/cmdline)
 (require srfi/19) ; Time Data Types and Procedures
 (require threading)
-
-(display (string-append "nasdaqtraded file date [" (date->string (current-date) "~1") "]: "))
-(flush-output)
-(define file-date
-  (let ([date-string-input (read-line)])
-    (if (equal? "" date-string-input) (current-date)
-        (string->date date-string-input "~Y-~m-~d"))))
 
 (struct symbol-entry
   (nasdaq-traded
@@ -25,30 +19,36 @@
    nasdaq-symbol
    next-shares))
 
-(display (string-append "db user [user]: "))
-(flush-output)
-(define db-user
-  (let ([db-user-input (read-line)])
-    (if (equal? "" db-user-input) "user"
-        db-user-input)))
+(define file-date (make-parameter (current-date)))
 
-(display (string-append "db name [local]: "))
-(flush-output)
-(define db-name
-  (let ([db-name-input (read-line)])
-    (if (equal? "" db-name-input) "local"
-        db-name-input)))
+(define db-user (make-parameter "user"))
 
-(display (string-append "db pass []: "))
-(flush-output)
-(define db-pass (read-line))
+(define db-name (make-parameter "local"))
 
-(define dbc (postgresql-connect #:user db-user #:database db-name #:password db-pass))
+(define db-pass (make-parameter ""))
+
+(command-line
+ #:program "racket transform-load.rkt"
+ #:once-each
+ [("-d" "--file-date") date
+                       "Nasdaq file date. Defaults to today"
+                       (file-date (string->date date "~Y-~m-~d"))]
+ [("-n" "--db-name") name
+                     "Database name. Defaults to 'local'"
+                     (db-name name)]
+ [("-p" "--db-pass") password
+                     "Database password"
+                     (db-pass password)]
+ [("-u" "--db-user") user
+                     "Database user name. Defaults to 'user'"
+                     (db-user user)])
+
+(define dbc (postgresql-connect #:user (db-user) #:database (db-name) #:password (db-pass)))
 
 (define nasdaq-traded-symbols
   (with-input-from-file
       (string-append "/var/tmp/nasdaq/nasdaqtraded."
-                     (date->string file-date "~1")
+                     (date->string (file-date) "~1")
                      ".txt")
     (λ ()
       (~> (in-lines)
@@ -61,7 +61,7 @@
              ; (flush-output)
              (let ([se (apply symbol-entry el)])
                (query-exec dbc
-                         "
+                           "
 with le as (
   select case $3
     when 'A' then 'NYSE MKT'::nasdaq.exchange
@@ -149,16 +149,16 @@ insert into nasdaq.symbol
   nasdaq_symbol = $10,
   is_next_shares = (select is_next_shares from ins);
 "
-                         (symbol-entry-act-symbol se)
-                         (symbol-entry-security-name se)
-                         (symbol-entry-listing-exchange se)
-                         (symbol-entry-market-category se)
-                         (symbol-entry-is-etf se)
-                         (string->number (symbol-entry-round-lot-size se))
-                         (symbol-entry-is-test-issue se)
-                         (symbol-entry-financial-status se)
-                         (symbol-entry-cqs-symbol se)
-                         (symbol-entry-nasdaq-symbol se)
-                         (symbol-entry-next-shares se)))) _)))))
+                           (symbol-entry-act-symbol se)
+                           (symbol-entry-security-name se)
+                           (symbol-entry-listing-exchange se)
+                           (symbol-entry-market-category se)
+                           (symbol-entry-is-etf se)
+                           (string->number (symbol-entry-round-lot-size se))
+                           (symbol-entry-is-test-issue se)
+                           (symbol-entry-financial-status se)
+                           (symbol-entry-cqs-symbol se)
+                           (symbol-entry-nasdaq-symbol se)
+                           (symbol-entry-next-shares se)))) _)))))
 
 (disconnect dbc)
