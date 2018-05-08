@@ -124,7 +124,8 @@ insert into nasdaq.symbol
   financial_status,
   cqs_symbol,
   nasdaq_symbol,
-  is_next_shares
+  is_next_shares,
+  last_seen
 ) values (
   $1,
   $2,
@@ -136,7 +137,8 @@ insert into nasdaq.symbol
   (select financial_status from fs),
   (select cqs_symbol from cqss),
   $10,
-  (select is_next_shares from ins)
+  (select is_next_shares from ins),
+  $12::text::date
 ) on conflict (act_symbol) do update set
   security_name = $2,
   listing_exchange = (select listing_exchange from le),
@@ -147,7 +149,8 @@ insert into nasdaq.symbol
   financial_status = (select financial_status from fs),
   cqs_symbol = (select cqs_symbol from cqss),
   nasdaq_symbol = $10,
-  is_next_shares = (select is_next_shares from ins);
+  is_next_shares = (select is_next_shares from ins),
+  last_seen = $12::text::date;
 "
                            (symbol-entry-act-symbol se)
                            (symbol-entry-security-name se)
@@ -159,6 +162,7 @@ insert into nasdaq.symbol
                            (symbol-entry-financial-status se)
                            (symbol-entry-cqs-symbol se)
                            (symbol-entry-nasdaq-symbol se)
-                           (symbol-entry-next-shares se)))) _)))))
+                           (symbol-entry-next-shares se)
+                           (date->string (file-date) "~1")))) _)))))
 
 (disconnect dbc)

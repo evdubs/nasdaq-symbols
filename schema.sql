@@ -20,5 +20,6 @@ CREATE TABLE nasdaq.symbol
     cqs_symbol text COLLATE pg_catalog."default",
     nasdaq_symbol text COLLATE pg_catalog."default" NOT NULL,
     is_next_shares boolean NOT NULL,
+    last_seen date NOT NULL,
     CONSTRAINT symbol_pkey PRIMARY KEY (act_symbol)
 );
