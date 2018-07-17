@@ -1,3 +1,9 @@
+CREATE AGGREGATE public.mul(numeric) (
+  SFUNC=numeric_mul,
+  STYPE=numeric,
+  INITCOND='1'
+);
+
 CREATE TYPE nasdaq.exchange AS ENUM
     ('NYSE MKT', 'NYSE', 'NYSE ARCA', 'NASDAQ', 'IEXG', 'BATS');
 	
