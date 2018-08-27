@@ -45,6 +45,8 @@
 
 (define dbc (postgresql-connect #:user (db-user) #:database (db-name) #:password (db-pass)))
 
+(define insert-counter 0)
+
 (define nasdaq-traded-symbols
   (with-input-from-file
       (string-append "/var/tmp/nasdaq/nasdaqtraded."
@@ -163,6 +165,9 @@ insert into nasdaq.symbol
                            (symbol-entry-cqs-symbol se)
                            (symbol-entry-nasdaq-symbol se)
                            (symbol-entry-next-shares se)
-                           (date->string (file-date) "~1")))) _)))))
+                           (date->string (file-date) "~1"))
+               (set! insert-counter (add1 insert-counter)))) _)))))
 
 (disconnect dbc)
+
+(displayln (string-append "Inserted or updated " (number->string insert-counter) " rows"))
