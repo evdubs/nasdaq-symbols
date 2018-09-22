@@ -1,7 +1,7 @@
-#lang racket
+#lang racket/base
 
-(require net/ftp)
-(require srfi/19) ;; Time Data Types and Procedures
+(require net/ftp
+         srfi/19) ;; Time Data Types and Procedures
 
 (define nasdaq-ftp (ftp-establish-connection "ftp.nasdaqtrader.com" 21 "anonymous" "anonymous"))
 (ftp-cd nasdaq-ftp "SymbolDirectory")

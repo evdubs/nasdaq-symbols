@@ -1,9 +1,11 @@
-#lang racket
+#lang racket/base
 
-(require db)
-(require racket/cmdline)
-(require srfi/19) ; Time Data Types and Procedures
-(require threading)
+(require db
+         racket/cmdline
+         racket/list
+         racket/sequence
+         srfi/19 ; Time Data Types and Procedures
+         threading)
 
 (struct symbol-entry
   (nasdaq-traded
