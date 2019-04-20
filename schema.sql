@@ -15,16 +15,16 @@ CREATE TYPE nasdaq.market_category AS ENUM
 
 CREATE TABLE nasdaq.symbol
 (
-    act_symbol text COLLATE pg_catalog."default" NOT NULL,
-    security_name text COLLATE pg_catalog."default" NOT NULL,
+    act_symbol text NOT NULL,
+    security_name text NOT NULL,
     listing_exchange nasdaq.exchange NOT NULL,
     market_category nasdaq.market_category,
     is_etf boolean,
     round_lot_size integer NOT NULL,
     is_test_issue boolean NOT NULL,
     financial_status nasdaq.financial_status,
-    cqs_symbol text COLLATE pg_catalog."default",
-    nasdaq_symbol text COLLATE pg_catalog."default" NOT NULL,
+    cqs_symbol text,
+    nasdaq_symbol text NOT NULL,
     is_next_shares boolean NOT NULL,
     last_seen date NOT NULL,
     CONSTRAINT symbol_pkey PRIMARY KEY (act_symbol)
