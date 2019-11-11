@@ -1,10 +1,10 @@
 #lang racket/base
 
 (require db
+         gregor
          racket/cmdline
          racket/list
          racket/sequence
-         srfi/19 ; Time Data Types and Procedures
          threading)
 
 (struct symbol-entry
@@ -21,7 +21,7 @@
    nasdaq-symbol
    next-shares))
 
-(define file-date (make-parameter (current-date)))
+(define file-date (make-parameter (today)))
 
 (define db-user (make-parameter "user"))
 
@@ -32,9 +32,9 @@
 (command-line
  #:program "racket transform-load.rkt"
  #:once-each
- [("-d" "--file-date") date
+ [("-d" "--file-date") date-str
                        "Nasdaq file date. Defaults to today"
-                       (file-date (string->date date "~Y-~m-~d"))]
+                       (file-date (iso8601->date date-str))]
  [("-n" "--db-name") name
                      "Database name. Defaults to 'local'"
                      (db-name name)]
@@ -52,7 +52,7 @@
 (define nasdaq-traded-symbols
   (with-input-from-file
       (string-append "/var/tmp/nasdaq/nasdaqtraded."
-                     (date->string (file-date) "~1")
+                     (~t (file-date) "yyyy-MM-dd")
                      ".txt")
     (λ ()
       (~> (in-lines)
@@ -167,7 +167,7 @@ insert into nasdaq.symbol
                            (symbol-entry-cqs-symbol se)
                            (symbol-entry-nasdaq-symbol se)
                            (symbol-entry-next-shares se)
-                           (date->string (file-date) "~1"))
+                           (~t (file-date) "yyyy-MM-dd"))
                (set! insert-counter (add1 insert-counter)))) _)))))
 
 (disconnect dbc)

@@ -1,7 +1,7 @@
 #lang racket/base
 
-(require net/ftp
-         srfi/19) ;; Time Data Types and Procedures
+(require gregor
+         net/ftp)
 
 (define nasdaq-ftp (ftp-establish-connection "ftp.nasdaqtrader.com" 21 "anonymous" "anonymous"))
 (ftp-cd nasdaq-ftp "SymbolDirectory")
@@ -11,5 +11,5 @@
 
 (rename-file-or-directory "/var/tmp/nasdaq/nasdaqtraded.txt"
                           (string-append "/var/tmp/nasdaq/nasdaqtraded."
-                                         (date->string (current-date) "~1")
+                                         (~t (today) "yyyy-MM-dd")
                                          ".txt"))
