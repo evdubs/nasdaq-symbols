@@ -1,3 +1,5 @@
+CREATE SCHEMA nasdaq;
+
 CREATE AGGREGATE public.mul(numeric) (
   SFUNC=numeric_mul,
   STYPE=numeric,
