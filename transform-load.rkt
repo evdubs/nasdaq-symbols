@@ -50,10 +50,7 @@
 (define insert-counter 0)
 
 (define nasdaq-traded-symbols
-  (with-input-from-file
-      (string-append "/var/tmp/nasdaq/nasdaqtraded."
-                     (~t (file-date) "yyyy-MM-dd")
-                     ".txt")
+  (with-input-from-file (string-append "/var/tmp/nasdaq/nasdaqtraded." (~t (file-date) "yyyy-MM-dd") ".txt")
     (λ ()
       (~> (in-lines)
           (sequence-map (λ (el) (regexp-split #rx"\\|" el)) _)
@@ -61,8 +58,6 @@
                                        (equal? "N" (first el)))) _)
           (sequence-for-each
            (λ (el)
-             ; (displayln el)
-             ; (flush-output)
              (let ([se (apply symbol-entry el)])
                (query-exec dbc
                            "
