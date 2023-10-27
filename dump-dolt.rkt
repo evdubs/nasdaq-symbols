@@ -66,4 +66,4 @@ from
 (system (string-append "cd " (base-folder) "; /usr/local/bin/dolt table import -r symbol symbol-" (as-of-date) ".csv"))
 
 (system (string-append "cd " (base-folder) "; /usr/local/bin/dolt add symbol; "
-                       "/usr/local/bin/dolt commit -m 'symbol " (as-of-date) " update'; /usr/local/bin/dolt push"))
+                       "/usr/local/bin/dolt commit -m 'symbol " (as-of-date) " update'; /usr/local/bin/dolt push --silent"))
