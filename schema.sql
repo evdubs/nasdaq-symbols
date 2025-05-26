@@ -7,7 +7,7 @@ CREATE AGGREGATE public.mul(numeric) (
 );
 
 CREATE TYPE nasdaq.exchange AS ENUM
-    ('NYSE MKT', 'NYSE', 'NYSE ARCA', 'NASDAQ', 'IEXG', 'BATS');
+    ('NYSE MKT', 'NYSE', 'NYSE ARCA', 'NASDAQ', 'IEXG', 'BATS', 'CHX');
 	
 CREATE TYPE nasdaq.financial_status AS ENUM
     ('Deficient', 'Delinquent', 'Bankrupt', 'Normal', 'Deficient and Bankrupt', 'Deficient and Delinquent', 'Delinquent and Bankrupt', 'Deficient, Delinquent, and Bankrupt');
