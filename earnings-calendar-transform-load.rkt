@@ -10,7 +10,7 @@
          racket/string
          threading)
 
-(define base-folder (make-parameter "/var/tmp/nasdaq/earnings-calendar"))
+(define base-folder (make-parameter "/var/local/nasdaq/earnings-calendar"))
 
 (define folder-date (make-parameter (today)))
 
@@ -24,7 +24,7 @@
  #:program "racket earnings-calendar-transform-load.rkt"
  #:once-each
  [("-b" "--base-folder") folder
-                         "Earnings Calendar base folder. Defaults to /var/tmp/nasdaq/earnings-calendar"
+                         "Earnings Calendar base folder. Defaults to /var/local/nasdaq/earnings-calendar"
                          (base-folder folder)]
  [("-d" "--folder-date") date
                          "Earnings Calendar folder date. Defaults to today"

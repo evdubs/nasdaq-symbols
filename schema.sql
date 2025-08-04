@@ -8,10 +8,10 @@ CREATE AGGREGATE public.mul(numeric) (
 
 CREATE TYPE nasdaq.exchange AS ENUM
     ('NYSE MKT', 'NYSE', 'NYSE ARCA', 'NASDAQ', 'IEXG', 'BATS', 'CHX');
-	
+
 CREATE TYPE nasdaq.financial_status AS ENUM
     ('Deficient', 'Delinquent', 'Bankrupt', 'Normal', 'Deficient and Bankrupt', 'Deficient and Delinquent', 'Delinquent and Bankrupt', 'Deficient, Delinquent, and Bankrupt');
-	
+
 CREATE TYPE nasdaq.market_category AS ENUM
     ('Global Select', 'Global', 'Capital');
 
@@ -30,4 +30,14 @@ CREATE TABLE nasdaq.symbol
     is_next_shares boolean NOT NULL,
     last_seen date NOT NULL,
     CONSTRAINT symbol_pkey PRIMARY KEY (act_symbol)
+);
+
+CREATE TABLE nasdaq.earnings_calendar
+(
+    act_symbol text NOT NULL,
+    period_end_date date NOT NULL,
+    "date" date NOT NULL,
+    "when" nasdaq."when" NULL,
+    CONSTRAINT earnings_calendar_pk PRIMARY KEY (act_symbol, period_end_date),
+    CONSTRAINT earnings_calendar_act_symbol_fkey FOREIGN KEY (act_symbol) REFERENCES nasdaq.symbol(act_symbol)
 );
