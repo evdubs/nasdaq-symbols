@@ -16,7 +16,6 @@ BEGIN
   IF current_best IS NULL THEN RETURN next_any; END IF;
   IF next_any IS NULL THEN RETURN current_best; END IF;
 
-  -- Cast to numeric inside to safely compare any number type
   IF ABS(next_any - target_any) < ABS(current_best - target_any) THEN
     RETURN next_any;
   ELSE
