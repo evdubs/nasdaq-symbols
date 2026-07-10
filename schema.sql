@@ -6,6 +6,30 @@ CREATE AGGREGATE public.mul(numeric) (
   INITCOND='1'
 );
 
+CREATE OR REPLACE FUNCTION public.closest_step(
+  current_best anyelement,
+  next_any anyelement,
+  target_any anyelement
+)
+RETURNS anyelement AS $$
+BEGIN
+  IF current_best IS NULL THEN RETURN next_any; END IF;
+  IF next_any IS NULL THEN RETURN current_best; END IF;
+
+  -- Cast to numeric inside to safely compare any number type
+  IF ABS(next_any - target_any) < ABS(current_best - target_any) THEN
+    RETURN next_any;
+  ELSE
+    RETURN current_best;
+  END IF;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+CREATE OR REPLACE AGGREGATE public.closest(anyelement, anyelement) (
+  SFUNC = closest_step,
+  STYPE = anyelement
+);
+
 CREATE TYPE nasdaq.exchange AS ENUM
     ('NYSE MKT', 'NYSE', 'NYSE ARCA', 'NASDAQ', 'IEXG', 'BATS', 'CHX');
 
