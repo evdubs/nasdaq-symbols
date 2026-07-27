@@ -38,6 +38,9 @@ CREATE TYPE nasdaq.financial_status AS ENUM
 CREATE TYPE nasdaq.market_category AS ENUM
     ('Global Select', 'Global', 'Capital');
 
+CREATE TYPE nasdaq.when AS ENUM
+    ('Before market open', 'After market close');
+
 CREATE TABLE nasdaq.symbol
 (
     act_symbol text NOT NULL,
