@@ -65,6 +65,7 @@
 with le as (
   select case $3
     when 'A' then 'NYSE MKT'::nasdaq.exchange
+    when 'F' then 'TXSE'::nasdaq.exchange
     when 'M' then 'CHX'::nasdaq.exchange
     when 'N' then 'NYSE'::nasdaq.exchange
     when 'P' then 'NYSE ARCA'::nasdaq.exchange
