@@ -30,7 +30,7 @@ CREATE OR REPLACE AGGREGATE public.closest(anyelement, anyelement) (
 );
 
 CREATE TYPE nasdaq.exchange AS ENUM
-    ('NYSE MKT', 'NYSE', 'NYSE ARCA', 'NASDAQ', 'IEXG', 'BATS', 'CHX');
+    ('NYSE MKT', 'NYSE', 'NYSE ARCA', 'NASDAQ', 'IEXG', 'BATS', 'CHX', 'TXSE');
 
 CREATE TYPE nasdaq.financial_status AS ENUM
     ('Deficient', 'Delinquent', 'Bankrupt', 'Normal', 'Deficient and Bankrupt', 'Deficient and Delinquent', 'Delinquent and Bankrupt', 'Deficient, Delinquent, and Bankrupt');
